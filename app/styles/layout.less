@@ -1,0 +1,48 @@
+/*-----------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------OUTHER-------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------*/
+@color-profile: #ff5959;
+
+.wrapper {
+  overflow: hidden;
+  width: 1170px;
+  margin: 0 auto;
+}
+.background-color-red {
+  background: url('../img/line_bg_white.png') no-repeat center 100px @color-profile;
+}
+.background-color-grey {
+  background: url('../img/line_bg_black.png') no-repeat center 100px #e8e8e8;
+}
+.depart {
+  padding: 40px 0 140px;
+}
+img {
+  height: auto;
+  max-width: 100%;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.headline {
+  font-size: 2.1rem;
+  text-align: center;
+  font-weight: 400;
+}
+.headline-color {
+  color: #fff;
+}
+.link {
+  background: none;
+  border: 2px solid @color-profile;
+  border-radius: 10px;
+  margin-left: 10px;
+  padding: 10px 20px;
+  color: @color-profile;
+  font-size: 1rem;
+  transition: .4s;
+
+  &:hover {
+    color: #fff;
+    background: @color-profile;
+  }
+}

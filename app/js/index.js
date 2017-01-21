@@ -1,108 +1,122 @@
 'use strict';
 
-let ul,
-    liItems,
-    imageNumber,
-    imageWidth,
-    prev, next,
-    currentPostion = 0,
-    currentImage = 0;
+window.addEventListener('load', function() {
+    let newsWrapper,
+        divItems,
+        imageNumber,
+        imageWidth,
+        prev,
+        next;
+    let currentPosition = 0;
+    let currentImage = 0;
 
-function init(){
-    ul = document.getElementById('image_slider');
-    liItems = ul.children;
-    imageNumber = liItems.length;
-    imageWidth = liItems[0].clientWidth;
-    prev = document.querySelector(".prev");
-    next = document.querySelector(".next");
-    generatePager(imageNumber);
-    prev.onclick = function(){ onClickPrev();};
-    next.onclick = function(){ onClickNext();};
-}
+    function init() {
+        newsWrapper = document.getElementById('image_slider');
+        divItems = newsWrapper.children;
+        imageNumber = divItems.length;
+        imageWidth = divItems[0].offsetWidth;
+        newsWrapper.style.width = `${parseInt(imageWidth * imageNumber)}px`;
+        prev = document.querySelector(".prev");
+        next = document.querySelector(".next");
+        generateDots(imageNumber);
+        prev.onclick = () => {
+            onClickPrev();
+        };
+        next.onclick = () => {
+            onClickNext();
+        };
+    }
+    function animate(opts) {
+        let start = new Date,
+            id = setInterval(() => {
+                let timePassed = new Date - start,
+                    progress = timePassed / opts.duration;
 
-function animate(opts){
-    let start = new Date,
-        id = setInterval(function(){
+                if (progress > 1) {
+                    progress = 1;
+                }
+                let delta = opts.delta(progress);
+                opts.step(delta);
 
-            let timePassed = new Date - start,
-                progress = timePassed / opts.duration;
+                if (progress == 1) {
+                    clearInterval(id);
+                    opts.callback();
+                }
+        }, opts.delay || 17);
+    }
 
-            if (progress > 1){
-                progress = 1;
+    function slideTo(imageToGo) {
+        let direction,
+            numOfImageToGo = Math.abs(imageToGo - currentImage);
+
+        direction = currentImage > imageToGo ? 1 : -1;
+        currentPosition = -1 * currentImage * imageWidth;
+
+        let opts = {
+            duration: 500,
+            delta(p) {
+                return p;
+            },
+            step(delta) {
+                newsWrapper.style.left = `${parseInt(currentPosition + direction * delta * imageWidth * numOfImageToGo)}px`;
+            },
+            callback() {
+                currentImage = imageToGo;
             }
-
-            let delta = opts.delta(progress);
-            opts.step(delta);
-
-            if (progress == 1){
-                clearInterval(id);
-                opts.callback();
-            }
-    });
-}
-
-function slideTo(imageToGo){
-    let numOfImageToGo = Math.abs(imageToGo - currentImage),
-        direction;
-
-    direction = currentImage > imageToGo ? 1 : -1;
-    currentPostion = -1 * currentImage * imageWidth ;
-
-    let opts = {
-        duration: 1000,
-        delta:(p) => p,
-        step:(delta) => {
-            if(direction == 1) {
-                ul.style.left = parseInt(currentPostion + (delta * ((imageWidth) * numOfImageToGo))) + 'px';
-            } else {
-                ul.style.left = parseInt(currentPostion - (delta * ((imageWidth+(currentImage+1)*25)) * numOfImageToGo)) + 'px';
-            }
-        },
-        callback:() => {currentImage = imageToGo;}
-    };
-    animate(opts);
-}
-
-function onClickPrev(){
-    if (!currentImage){
-        slideTo(imageNumber - 1);
+        };
+        animate(opts);
     }
-    else{
-        slideTo(currentImage - 1);
-    }
-}
+    function activeDot(q) {
+        let remLi = document.getElementsByClassName('dot');
 
-function onClickNext(){
-    if (currentImage == imageNumber - 1){
-        slideTo(0);
+        for(let j = 0; j < imageNumber/3; j++){
+            remLi[j].classList.remove('active');
+        }
+        remLi[q].classList.add('active');
     }
-    else{
-        slideTo(currentImage + 1);
+    function onClickNext() {
+        if (currentImage == imageNumber - 3) {
+            slideTo(0);
+            activeDot(0);
+        }
+        else {
+            slideTo(currentImage + 3);
+            activeDot((currentImage + 3)/3);
+        }
     }
-}
 
-function generatePager(imageNumber){
-    let pagerDiv = document.getElementById('pager'),
-        pageNumber;
+    function onClickPrev() {
+        if (currentImage == 0) {
+            slideTo(imageNumber - 3);
+            activeDot((imageNumber - 3)/3);
+        }
+        else {
+            slideTo(currentImage - 3);
+            activeDot((currentImage - 3)/3);
+        }
+    }
 
-    for (let i = 0; i < imageNumber; i++){
-        const li = document.createElement('li');
-        pageNumber = document.createTextNode(parseInt(i + 1));
-        li.appendChild(pageNumber);
-        pagerDiv.appendChild(li);
-        li.onclick = function(i){
-            return function(){
+    function generateDots(imageNumber) {
+        let i,
+            pagerDiv = document.getElementById('pager');
+
+        for (i = 0; i < imageNumber; i = i + 3) {
+            let li = document.createElement('li');
+            li.className = "dot";
+            pagerDiv.appendChild(li);
+            li.onclick = (i => function () {
                 slideTo(i);
-            }
-        }(i);
+                let remLi = document.getElementsByClassName('dot');
+                for(let j = 0; j < imageNumber/3; j++){
+                    remLi[j].classList.remove('active');
+                }
+                this.classList.add('active');
+            })(i);
+        }
+        pagerDiv.firstElementChild.classList.add('active');
     }
-    let computedStyle = document.defaultView.getComputedStyle(li, null),
-        liWidth = parseInt(li.offsetWidth),
-        liMargin = parseInt(computedStyle.margin.replace('px',""));
-
-    pagerDiv.style.width = parseInt((liWidth + liMargin * 2) * imageNumber) + 'px';
-}
-window.onload = init;
+    init();
+});
 
 //scroll to
 

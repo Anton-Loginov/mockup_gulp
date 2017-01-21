@@ -5,52 +5,54 @@
 .news {
 	position: relative;
 
-	.slider_wrapper{
-		overflow: hidden;
-		position:relative;
+	.container {
 		width: 1170px;
+		height: 550px;
 		margin: 0 auto;
-		top:auto;
 
-		.list-news {
-			position: relative;
+		.slider_wrapper {
 			overflow: hidden;
-			margin: 60px auto;
+			position: relative;
+			height: 700px;
+			top: auto;
 
-
-			&-item {
+			#image_slider {
+				position: relative;
+				height: auto;
+				list-style: none;
+				overflow: hidden;
 				float: left;
-				width: 31%;
-				margin-left: 25px;
+				padding: 0;
+				margin: 0;
 
-				&:first-child {
-					margin-left: 0;
-				}
-
-				h4 {
+				.news-item {
+					position: relative;
+					float: left;
+					box-sizing: content-box;
+					padding-right: 30px;
+					margin-top: 60px;
+					max-width: 370px;
+					max-height: 650px;
 					color: #fff;
-					font-size: 1.1rem;
-					font-weight: 700;
-					margin: 10px 0;
-				}
-				.text-news {
-					color: #fff;
-					font-size: .9rem;
-					margin: 10px 0;
-				}
 
-				a {
-					color: #fff;
-					font-size: .9rem;
-					font-weight: 500;
-
-					&:hover {
-						text-decoration: underline;
+					h4 {
+						color: #fff;
+						font-size: 1.1rem;
+						font-weight: 700;
+						margin: 10px 0;
 					}
-				}
+					a {
+						color: #fff;
+						font-size: .9rem;
+						font-weight: 500;
 
-				.comments {
-					margin-left: 35px;
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+					.comments {
+						margin-left: 35px;
+					}
 				}
 			}
 		}
@@ -80,29 +82,27 @@
 	.prev {
 		left: 1%;
 	}
-	#pager{
+	#pager {
+		margin: 40px auto;
 		padding: 0;
-		position:relative;
-		height: 50px;
-		margin: 10px auto;
+		position: relative;
+		height: auto;
+		text-align: center;
 
-		li{
-			padding: 0;
-			margin: 5px;
-			width: 20px;
-			height: 20px;
-			border: 1px solid #000;
-			color: transparent;
-			list-style: none;
-			opacity: 0.6;
-			float:left;
-			border-radius: 50%;
+		li {
+			height: 15px;
+			width: 15px;
 			cursor: pointer;
-
-			&:hover {
-				opacity:0.9;
-			}
+			margin: 0 3px;
+			background-color: rgba(255, 255, 255, 0.3);
+			border-radius: 50%;
+			display: inline-block;
+			transition: background-color 0.6s ease;
 
 		}
+	}
+	#pager li:hover,
+	#pager li.active {
+		background-color: rgba(255, 255, 255, 0.8);
 	}
 }
